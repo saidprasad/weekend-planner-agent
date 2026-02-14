@@ -123,11 +123,8 @@ def test_recommend_empty_content_returns_empty_string(sample_input):
 
 
 def test_get_client_raises_without_api_key():
-    with patch.dict("os.environ", {}, clear=True):
-        # Remove OPENAI_API_KEY if present
-        os_environ = __import__("os").environ
-        os_environ.pop("OPENAI_API_KEY", None)
-        from agent import _get_client
+    from agent import _get_client
+    with patch.dict("os.environ", {"OPENAI_API_KEY": ""}, clear=False):
         with pytest.raises(ValueError) as exc_info:
             _get_client()
         assert "OPENAI_API_KEY" in str(exc_info.value)
