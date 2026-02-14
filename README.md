@@ -67,6 +67,17 @@ python main.py "Tokyo" --model gpt-4o
 | `OPENAI_API_KEY` | Yes      | OpenAI API key for the recommendation LLM. |
 | `OPENAI_MODEL`   | No       | Model name (default: `gpt-4o-mini`). |
 
+## Tests
+
+Install dependencies (including pytest), then run:
+
+```bash
+pip install -r requirements.txt
+python -m pytest
+```
+
+Tests cover: `weather` (geocode, get_forecast, weather_summary with mocked HTTP), `agent` (weekend selection, recommend with mocked OpenAI, get_weekend_recommendation), and the CLI in `main.py`.
+
 ## License
 
 Use and modify as you like. Weather data from Open-Meteo; see their terms for usage.
