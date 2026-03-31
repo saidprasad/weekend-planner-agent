@@ -55,7 +55,9 @@ def recommend():
         recommendation = get_weekend_recommendation(location, model=model)
         return jsonify({"location": location, "recommendation": recommendation}), 200
     except ValueError as e:
-        return jsonify({"error": str(e)}), 400
+        # Missing OPENAI_API_KEY is a server configuration error, not bad client input
+        status = 500 if "OPENAI_API_KEY" in str(e) else 400
+        return jsonify({"error": str(e)}), status
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

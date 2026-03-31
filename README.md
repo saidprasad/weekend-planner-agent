@@ -67,6 +67,39 @@ python main.py "Tokyo" --model gpt-4o
 | `OPENAI_API_KEY` | Yes      | OpenAI API key for the recommendation LLM. |
 | `OPENAI_MODEL`   | No       | Model name (default: `gpt-4o-mini`). |
 
+## Deploy to GCP (Cloud Run)
+
+**Where to add your Google Cloud project details:**
+
+1. **Option A – Environment variable (recommended)**  
+   In `.env` (or your shell), set:
+   ```bash
+   GCP_PROJECT_ID=your-google-cloud-project-id
+   ```
+   Then run `./deploy.sh`; it uses `GCP_PROJECT_ID` for the deploy.
+
+2. **Option B – gcloud default**  
+   Set the active project once:
+   ```bash
+   gcloud config set project your-google-cloud-project-id
+   ```
+   Then run `./deploy.sh` (it will use the configured project if `GCP_PROJECT_ID` is not set).
+
+3. **Option C – Per-command**  
+   Pass the project on each deploy:
+   ```bash
+   gcloud run deploy weekend-planner-api --project=your-project-id --source=. --region=us-central1 --allow-unauthenticated
+   ```
+
+**Steps:**
+
+1. Install [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) and run `gcloud auth login` and `gcloud auth application-default login`.
+2. Enable APIs: `gcloud services enable run.googleapis.com cloudbuild.googleapis.com --project=YOUR_PROJECT_ID`
+3. Set `GCP_PROJECT_ID` in `.env` (see `.env.example`) or run `gcloud config set project YOUR_PROJECT_ID`.
+4. Run `./deploy.sh`. After the first deploy, set `OPENAI_API_KEY` in the Cloud Run console (Edit & deploy → Variables and secrets).
+
+Optional: set `GCP_REGION` (default `us-central1`) or `GCP_SERVICE_NAME` (default `weekend-planner-api`) before running `deploy.sh`.
+
 ## Tests
 
 Install dependencies (including pytest), then run:
